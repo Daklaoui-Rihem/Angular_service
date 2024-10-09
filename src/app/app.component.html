@@ -6,8 +6,11 @@
   <button (click)="DeleteList()">Delete</button>
 </div>
 
-<!-- List rendering -->
-<ul>
+<!-- Button to toggle the visibility of the list -->
+<button (click)="toggleListVisibility()">{{ listVisibilityLabel }}</button>
+
+<!-- List rendering with *ngIf to toggle visibility -->
+<ul *ngIf="isListVisible">
   <li *ngFor="let item of items" [style.color]="item.color">{{ item.text }}</li>
 </ul>
 

@@ -18,6 +18,10 @@ export class AppComponent {
   currentSortModeIndex: number = 0;  // Tracks the current sort mode
   sortButtonLabel: string = this.sortModes[this.currentSortModeIndex]; // Initial button text
 
+  // New properties for toggling list visibility
+  isListVisible: boolean = true;  // Track visibility of the list
+  listVisibilityLabel: string = 'Hide List';  // Button label to hide/show list
+
   addToList() {
     if (this.inputValue.trim() !== '') {
       // Add the input value to the list with the current color
@@ -100,5 +104,11 @@ export class AppComponent {
 
     // Update the button label to the next mode
     this.sortButtonLabel = this.sortModes[this.currentSortModeIndex];
+  }
+
+  // Method to toggle list visibility
+  toggleListVisibility() {
+    this.isListVisible = !this.isListVisible;  // Toggle the list visibility flag
+    this.listVisibilityLabel = this.isListVisible ? 'Hide List' : 'Show List';  // Update the button label
   }
 }
