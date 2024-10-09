@@ -2,7 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';  // Add this line
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { MyService } from './my-service.service';
 
 @NgModule({
   declarations:[
@@ -11,9 +13,10 @@ import { FormsModule } from '@angular/forms';  // Add this line
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [],
-  bootstrap: [AppComponent], // Use AppComponent for bootstrapping
+  providers: [MyService],  // Register the service
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

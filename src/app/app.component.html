@@ -19,3 +19,9 @@
 
 <!-- Single button for switching between sorting modes -->
 <button (click)="cycleSortMode()">{{ sortButtonLabel }}</button>
+<!-- src/app/app.component.html -->
+<div *ngFor="let post of posts">
+  <h3>{{ post.title }}</h3>
+  <p>{{ post.body }}</p>
+</div>
+

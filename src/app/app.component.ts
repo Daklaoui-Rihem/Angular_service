@@ -1,17 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MyService } from './my-service.service'; // Adjust the path if necessary
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
+  posts: any[] = [];  // Array to hold the API data
+
+  constructor(private myService: MyService) { }
+  ngOnInit(): void {
+    // Call the service to fetch posts from the API
+    this.myService.getPosts().subscribe((data) => {
+      this.posts = data; });} // Assign the data to the posts array
   inputValue: string = '';  // Holds the value of the input field
   items: { text: string, color: string }[] = [];  // Holds the list of items with associated colors
   colors: string[] = ['red', 'green', 'blue', 'orange', 'purple']; // Array of colors
   currentIndex: number = 0;  // Keeps track of the current color for sequential mode
   isRandom: boolean = false; // Tracks whether to show random colors or sequential
   buttonLabel: string = 'Show Random Colors';  // Initial button text
+
+  
 
   // For sorting modes
   sortModes: string[] = ['Sort Ascending', 'Sort Descending', 'Shuffle List']; // Modes
@@ -21,6 +31,7 @@ export class AppComponent {
   // New properties for toggling list visibility
   isListVisible: boolean = true;  // Track visibility of the list
   listVisibilityLabel: string = 'Hide List';  // Button label to hide/show list
+  
 
   addToList() {
     if (this.inputValue.trim() !== '') {
@@ -111,4 +122,5 @@ export class AppComponent {
     this.isListVisible = !this.isListVisible;  // Toggle the list visibility flag
     this.listVisibilityLabel = this.isListVisible ? 'Hide List' : 'Show List';  // Update the button label
   }
+  
 }
