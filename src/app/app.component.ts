@@ -1,126 +1,57 @@
-import { Component, OnInit } from '@angular/core';
-import { MyService } from './my-service.service'; // Adjust the path if necessary
+import { Component } from '@angular/core';
+import { ItemService } from './item.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit{
-  posts: any[] = [];  // Array to hold the API data
+export class AppComponent {
+  inputValue: string = '';  // Input field value
+  buttonLabel: string = 'Show Random Colors';  // Initial color mode button text
 
-  constructor(private myService: MyService) { }
-  ngOnInit(): void {
-    // Call the service to fetch posts from the API
-    this.myService.getPosts().subscribe((data) => {
-      this.posts = data; });} // Assign the data to the posts array
-  inputValue: string = '';  // Holds the value of the input field
-  items: { text: string, color: string }[] = [];  // Holds the list of items with associated colors
-  colors: string[] = ['red', 'green', 'blue', 'orange', 'purple']; // Array of colors
-  currentIndex: number = 0;  // Keeps track of the current color for sequential mode
-  isRandom: boolean = false; // Tracks whether to show random colors or sequential
-  buttonLabel: string = 'Show Random Colors';  // Initial button text
+  // Sort mode toggling properties
+  sortModes: string[] = ['Sort Ascending', 'Sort Descending', 'Shuffle List'];
+  currentSortModeIndex: number = 0;
+  sortButtonLabel: string = this.sortModes[this.currentSortModeIndex];
 
-  
+  // For list visibility toggling
+  isListVisible: boolean = true;
+  listVisibilityLabel: string = 'Hide List';
 
-  // For sorting modes
-  sortModes: string[] = ['Sort Ascending', 'Sort Descending', 'Shuffle List']; // Modes
-  currentSortModeIndex: number = 0;  // Tracks the current sort mode
-  sortButtonLabel: string = this.sortModes[this.currentSortModeIndex]; // Initial button text
+  constructor(private itemService: ItemService) {}
 
-  // New properties for toggling list visibility
-  isListVisible: boolean = true;  // Track visibility of the list
-  listVisibilityLabel: string = 'Hide List';  // Button label to hide/show list
-  
+  get items() {
+    return this.itemService.getItems();  // Access items directly from the service
+  }
 
   addToList() {
     if (this.inputValue.trim() !== '') {
-      // Add the input value to the list with the current color
-      this.items.push({ text: this.inputValue, color: this.colors[this.currentIndex] });
-      
-      // Update the index to cycle through colors
-      this.currentIndex = (this.currentIndex + 1) % this.colors.length;
+      this.itemService.addItem(this.inputValue);  // Add item via service
     }
   }
 
-  DeleteList() {
-    if (this.inputValue.trim() !== '') {
-      this.items.pop();
-    }
+  deleteLastItem() {
+    this.itemService.deleteLastItem();  // Delete item via service
   }
 
   toggleColorMode() {
-    this.isRandom = !this.isRandom;  // Toggle the boolean flag
-    this.buttonLabel = this.isRandom ? 'Show Sequential Colors' : 'Show Random Colors';  // Change button text
-
-    if (this.isRandom) {
-      // Randomize colors for each item
-      this.items.forEach(item => {
-        item.color = this.getRandomColor();
-      });
-    } else {
-      // Revert back to sequential colors
-      this.applySequentialColors();
-    }
-  }
-
-  getRandomColor(): string {
-    return this.colors[Math.floor(Math.random() * this.colors.length)];
-  }
-
-  applySequentialColors() {
-    this.items.forEach((item, index) => {
-      item.color = this.colors[index % this.colors.length];
-    });
+    this.itemService.toggleColorMode();  // Toggle color mode via service
+    this.buttonLabel = this.itemService.isRandom ? 'Show Sequential Colors' : 'Show Random Colors';
   }
 
   logMessage(): void {
     console.log('Button was clicked!');
   }
 
-  // Sort list alphabetically in ascending order
-  sortListAscending() {
-    this.items.sort((a, b) => a.text.localeCompare(b.text));
-  }
-
-  // Sort list alphabetically in descending order
-  sortListDescending() {
-    this.items.sort((a, b) => b.text.localeCompare(a.text));
-  }
-
-  // Shuffle the list items randomly
-  shuffleList() {
-    for (let i = this.items.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [this.items[i], this.items[j]] = [this.items[j], this.items[i]];
-    }
-  }
-
-  // Cycle between the three sorting modes
   cycleSortMode() {
-    switch (this.currentSortModeIndex) {
-      case 0:  // Ascending
-        this.sortListAscending();
-        break;
-      case 1:  // Descending
-        this.sortListDescending();
-        break;
-      case 2:  // Shuffle
-        this.shuffleList();
-        break;
-    }
-
-    // Move to the next mode
+    this.itemService.cycleSortMode(this.currentSortModeIndex);  // Sort mode via service
     this.currentSortModeIndex = (this.currentSortModeIndex + 1) % this.sortModes.length;
-
-    // Update the button label to the next mode
     this.sortButtonLabel = this.sortModes[this.currentSortModeIndex];
   }
 
-  // Method to toggle list visibility
   toggleListVisibility() {
-    this.isListVisible = !this.isListVisible;  // Toggle the list visibility flag
-    this.listVisibilityLabel = this.isListVisible ? 'Hide List' : 'Show List';  // Update the button label
+    this.isListVisible = !this.isListVisible;
+    this.listVisibilityLabel = this.isListVisible ? 'Hide List' : 'Show List';
   }
-  
 }

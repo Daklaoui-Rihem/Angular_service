@@ -3,20 +3,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { MyService } from './my-service.service';
+import { ItemService } from './item.service';  // Import the service
 
 @NgModule({
-  declarations:[
+  declarations: [
     AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
-    HttpClientModule
+    FormsModule
   ],
-  providers: [MyService],  // Register the service
+  providers: [ItemService], // Register ItemService
   bootstrap: [AppComponent]
 })
 export class AppModule {}

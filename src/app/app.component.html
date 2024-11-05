@@ -1,9 +1,9 @@
 <button (click)="logMessage()">Click me!</button>
-<br>
+<br />
 <div>
   <input [(ngModel)]="inputValue" placeholder="Enter text here" />
   <button (click)="addToList()">Add to List</button>
-  <button (click)="DeleteList()">Delete</button>
+  <button (click)="deleteLastItem()">Delete</button>
 </div>
 
 <!-- Button to toggle the visibility of the list -->
@@ -19,9 +19,3 @@
 
 <!-- Single button for switching between sorting modes -->
 <button (click)="cycleSortMode()">{{ sortButtonLabel }}</button>
-<!-- src/app/app.component.html -->
-<div *ngFor="let post of posts">
-  <h3>{{ post.title }}</h3>
-  <p>{{ post.body }}</p>
-</div>
-
